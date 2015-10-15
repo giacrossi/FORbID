@@ -24,14 +24,16 @@ endtype integrand
 
 abstract interface
   !< Abstract type bound procedures necessary for implementing a concrete extension of the class(integrand).
-  function function_value(self, x) result(f)
+  function function_value(self, x, y, z) result(f)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< f(x), integrand function evaluation.
   !---------------------------------------------------------------------------------------------------------------------------------
   import :: integrand, R_P
-  class(integrand), intent(IN)  :: self !< Integrand field.
-  real(R_P),        intent(IN)  :: x    !< Independent abscissa value.
-  real(R_P)                     :: f    !< Result of the time derivative function of integrand field.
+  class(integrand),    intent(IN) :: self !< Integrand field.
+  real(R_P),           intent(IN) :: x    !< Independent X abscissa value.
+  real(R_P), optional, intent(IN) :: y    !< Independent Y abscissa value.
+  real(R_P), optional, intent(IN) :: z    !< Independent Z abscissa value.
+  real(R_P)                       :: f    !< Result of the time derivative function of integrand field.
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction function_value
 endinterface
