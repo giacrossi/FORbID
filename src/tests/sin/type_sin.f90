@@ -44,12 +44,14 @@ contains
   endsubroutine init
 
   ! ADT integrand deferred methods
-  function sin_x(self, x) result(f)
+  function sin_x(self, x, y, z) result(f)
   !---------------------------------------------------------------------------------------------------------------------------------
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(sinf), intent(IN) :: self !< sin function.
-  real(R_P),   intent(IN) :: x    !< Time.
-  real(R_P)               :: f    !< Result of the time derivative function of integrand field.
+  class(sinf),         intent(IN) :: self !< sin function.
+  real(R_P),           intent(IN) :: x    !< X abscissa.
+  real(R_P), optional, intent(IN) :: y    !< Y abscissa.
+  real(R_P), optional, intent(IN) :: z    !< Z abscissa.
+  real(R_P)                       :: f    !< Result of the time derivative function of integrand field.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
