@@ -2,6 +2,8 @@
 
 # FORbID
 
+[![GitHub tag](https://img.shields.io/github/tag/giacombum/FORbID.svg)]() [![Join the chat at https://gitter.im/giacombum/FORbID](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/giacombum/FORbID?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![License](https://img.shields.io/badge/license-GNU%20GeneraL%20Public%20License%20v3,%20GPLv3-blue.svg)]()
 [![License](https://img.shields.io/badge/license-BSD2-red.svg)]()
 [![License](https://img.shields.io/badge/license-BSD3-red.svg)]()
@@ -71,7 +73,7 @@ Any feature request is welcome.
 
 #### Bibliography
 
-[1] *Methods of Numerical Integration*, Davis, P. J., Rabinowitz, P., Elsevier, 1984, [link]http://www.sciencedirect.com/science/article/pii/B9780122063602500017
+[1] *Methods of Numerical Integration*, Davis, P. J., Rabinowitz, P., 1984, Academic Press.
 
 [2] *Scientific Software Design: The Object-Oriented Way*, Rouson, Damian and Xia, Jim and Xu, Xiaofeng, 2011, ISBN 9780521888134, Cambridge University Press, New York, NY, USA.
 
