@@ -1,7 +1,7 @@
-!< gr integrator: provide the trapezoidal rule.
-module gr_integrator_trapezoidal
+!< FORbID integrator: provide the trapezoidal rule.
+module FORbID_integrator_trapezoidal
 !-----------------------------------------------------------------------------------------------------------------------------------
-!< gr integrator: provide the trapezoidal rule.
+!< FORbID integrator: provide the trapezoidal rule.
 !<
 !< Considering the following problem:
 !<
@@ -14,8 +14,8 @@ module gr_integrator_trapezoidal
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-use gr_kinds, only : R_P
-use gr_adt_integrand, only : integrand
+use FORbID_kinds, only : R_P
+use FORbID_adt_integrand, only : integrand
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -26,7 +26,7 @@ public :: trapezoidal_integrator
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 type :: trapezoidal_integrator
-  !< gr integrator: provide the trapezoidal rule.
+  !< FORbID integrator: provide the trapezoidal rule.
   !<
   !< @note The integrator can be used directly without any initialization.
   contains
@@ -49,4 +49,4 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction integrate
-endmodule gr_integrator_trapezoidal
+endmodule FORbID_integrator_trapezoidal
