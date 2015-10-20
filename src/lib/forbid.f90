@@ -7,6 +7,7 @@ module FORbID
 !-----------------------------------------------------------------------------------------------------------------------------------
 use FORbID_adt_integrand, only : integrand
 use FORbID_integrator_trapezoidal, only : trapezoidal_integrator
+use FORbID_integrator_midpoint, only : midpoint_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -14,5 +15,6 @@ implicit none
 private
 public :: integrand
 public :: trapezoidal_integrator
+public :: midpoint_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 endmodule FORbID
