@@ -5,18 +5,14 @@ module FORbID
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-use FORbID_adt_integrand, only : integrand
-use FORbID_integrator_midpoint,    only : midpoint_integrator
-use FORbID_integrator_trapezoidal, only : trapezoidal_integrator
-use FORbID_integrator_simpson,     only : simpson_integrator
+use FORbID_adt_integrand,            only : integrand
+use FORbID_integrator_newton-cotes,  only : newton-cotes_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
 private
 public :: integrand
-public :: midpoint_integrator
-public :: trapezoidal_integrator
-public :: simspon_integrator
+public :: newton-cotes_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 endmodule FORbID
