@@ -53,6 +53,11 @@ FORbID is aimed to be a KISS-pure-Fortran library for numerical integration of d
         + [x] Newton-Cotes' 9 points rule;
         + [x] Newton-Cotes' 10 points rule;
         + [x] Newton-Cotes' 11 points rule;
+    + [ ] Gaussian quadrature formulae:
+        + [x] Gauss-Legendre formulae:
+        + [ ] Gauss-Kronrod formulae:
+        + [ ] Montecarlo schemes for multidimensional function;
+        + [ ] acceleration methods;
     + [ ] Integration formulas of interpolatory type:
         + [ ] Fejér interpolation formulas;
         + [ ] Clenshaw-Curtis interpolation formulas;
@@ -60,10 +65,6 @@ FORbID is aimed to be a KISS-pure-Fortran library for numerical integration of d
         + [ ] midpoint adaptive quadrature;
         + [ ] trapezoidal adaptive quadrature;
         + [ ] Simpson's adaptive quadrature;
-    + [ ] Gaussian quadrature formulae:
-        + [ ] Gauss-Kronrod formulae:
-        + [ ] Montecarlo schemes for multidimensional function;
-        + [ ] acceleration methods;
 + [ ] efficient:
     + [ ] high scalability on parallel architectures:
         + [ ] support for shared memory multi/many cores architecture;
