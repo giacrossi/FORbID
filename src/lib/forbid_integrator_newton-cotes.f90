@@ -135,90 +135,70 @@ contains
   if (allocated(self%w)) deallocate(self%w); allocate(self%w(1:n+1)); self%w = 0._R_P
   select case(n)
   case(1)
-    self%k    = 0.5_R_P
-    self%w(1) = 1._R_P
-    self%w(2) = 1._R_P
+    self%k     =  0.5_R_P
+    self%w(1)  =  1._R_P
+    self%w(2)  =  1._R_P
   case(2)
-    self%k    = 1._R_P / 3._R_P
-    self%w(1) = 1._R_P
-    self%w(2) = 4._R_P
-    self%w(3) = 1._R_P
+    self%k     =  1._R_P / 3._R_P
+    self%w(1)  =  1._R_P
+    self%w(2)  =  4._R_P
+    self%w(3)  =  1._R_P
   case(3)
-    self%k    = 3._R_P / 8._R_P
-    self%w(1) = 1._R_P
-    self%w(2) = 3._R_P
-    self%w(3) = 3._R_P
-    self%w(4) = 1._R_P
+    self%k     =  3._R_P / 8._R_P
+    self%w(1)  =  1._R_P
+    self%w(2)  =  3._R_P
+    self%w(3)  =  3._R_P
+    self%w(4)  =  1._R_P
   case(4)
-    self%k    = 2._R_P / 45._R_P
-    self%w(1) = 7._R_P
-    self%w(2) = 32._R_P
-    self%w(3) = 12._R_P
-    self%w(4) = 32._R_P
-    self%w(5) = 7._R_P
+    self%k     =  2._R_P / 45._R_P
+    self%w(1)  =  7._R_P
+    self%w(2)  =  32._R_P
+    self%w(3)  =  12._R_P
+    self%w(4)  =  32._R_P
+    self%w(5)  =  7._R_P
   case(5)
-    self%k    = 5._R_P / 288._R_P
-    self%w(1) = 19._R_P
-    self%w(2) = 75._R_P
-    self%w(3) = 50._R_P
-    self%w(4) = 50._R_P
-    self%w(5) = 75._R_P
-    self%w(6) = 19._R_P
+    self%k     =  5._R_P / 288._R_P
+    self%w(1)  =  19._R_P;    self%w(6)  =  19._R_P
+    self%w(2)  =  75._R_P
+    self%w(3)  =  50._R_P
+    self%w(4)  =  50._R_P
+    self%w(5)  =  75._R_P
   case(6)
-    self%k    = 1._R_P / 140._R_P
-    self%w(1) = 41._R_P
-    self%w(2) = 216._R_P
-    self%w(3) = 27._R_P
-    self%w(4) = 272._R_P
-    self%w(5) = 27._R_P
-    self%w(6) = 216._R_P
-    self%w(7) = 41._R_P
+    self%k     =  1._R_P / 140._R_P
+    self%w(1)  =  41._R_P;    self%w(6)  =  216._R_P
+    self%w(2)  =  216._R_P;   self%w(7)  =  41._R_P
+    self%w(3)  =  27._R_P
+    self%w(4)  =  272._R_P
+    self%w(5)  =  27._R_P
   case(7)
-    self%k    = 7._R_P / 17280._R_P
-    self%w(1) = 751._R_P
-    self%w(2) = 3577._R_P
-    self%w(3) = 1323._R_P
-    self%w(4) = 2989._R_P
-    self%w(5) = 2989._R_P
-    self%w(6) = 1323._R_P
-    self%w(7) = 3577._R_P
-    self%w(8) = 751._R_P
+    self%k     =  7._R_P / 17280._R_P
+    self%w(1)  =  751._R_P;   self%w(6)  =  1323._R_P
+    self%w(2)  =  3577._R_P;  self%w(7)  =  3577._R_P
+    self%w(3)  =  1323._R_P;  self%w(8)  =  751._R_P
+    self%w(4)  =  2989._R_P
+    self%w(5)  =  2989._R_P
   case(8)
-    self%k    = 4._R_P / 14175._R_P
-    self%w(1) = 989._R_P
-    self%w(2) = 5888._R_P
-    self%w(3) = -928._R_P
-    self%w(4) = 10496._R_P
-    self%w(5) = -4540._R_P
-    self%w(6) = 10496._R_P
-    self%w(7) = -928._R_P
-    self%w(8) = 5888._R_P
-    self%w(9) = 989._R_P
+    self%k     =  4._R_P / 14175._R_P
+    self%w(1)  =  989._R_P;   self%w(6)  =  10496._R_P
+    self%w(2)  =  5888._R_P;  self%w(7)  = -928._R_P
+    self%w(3)  = -928._R_P;   self%w(8)  =  5888._R_P
+    self%w(4)  =  10496._R_P; self%w(9)  =  989._R_P
+    self%w(5)  = -4540._R_P
   case(9)
-    self%k     = 9._R_P / 89600._R_P
-    self%w(1)  = 2857._R_P
-    self%w(2)  = 15741._R_P
-    self%w(3)  = 1080._R_P
-    self%w(4)  = 19344._R_P
-    self%w(5)  = 5778._R_P
-    self%w(6)  = 5778._R_P
-    self%w(7)  = 19344._R_P
-    self%w(8)  = 1080._R_P
-    self%w(9)  = 15741._R_P
-    self%w(10) = 2857._R_P
+    self%k     =  9._R_P / 89600._R_P
+    self%w(1)  =  2857._R_P;  self%w(6)  =  5778._R_P
+    self%w(2)  =  15741._R_P; self%w(7)  =  19344._R_P
+    self%w(3)  =  1080._R_P;  self%w(8)  =  1080._R_P
+    self%w(4)  =  19344._R_P; self%w(9)  =  15741._R_P
+    self%w(5)  =  5778._R_P;  self%w(10) =  2857._R_P
   case(10)
-    self%k     = 5._R_P / 299376._R_P
-    self%w(1)  = 16067._R_P
-    self%w(2)  = 106300._R_P
-    self%w(3)  = -48525._R_P
-    self%w(4)  = 272400._R_P
-    self%w(5)  = -260550._R_P
-    self%w(6)  = 427368._R_P
-    self%w(7)  = -260550._R_P
-    self%w(8)  = 272400._R_P
-    self%w(9)  = -48525._R_P
-    self%w(10) = 106300._R_P
-    self%w(11) = 16067._R_P
+    self%k     =  5._R_P / 299376._R_P
+    self%w(1)  =  16067._R_P; self%w(7)  = -260550._R_P
+    self%w(2)  =  106300._R_P;self%w(8)  =  272400._R_P
+    self%w(3)  = -48525._R_P; self%w(9)  = -48525._R_P
+    self%w(4)  =  272400._R_P;self%w(10) =  106300._R_P
+    self%w(5)  = -260550._R_P;self%w(11) =  16067._R_P
+    self%w(6)  =  427368._R_P
   endselect
   endsubroutine init
 
@@ -237,7 +217,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   integral = 0._R_P
   do i=0,self%n
-    integral = integral + self%w(i) * f%f(a + i*(b-a)/n)
+    integral = integral + self%w(i+1_I_P) * f%f(a + i*(b-a)/n)
   enddo
   integral = integral * (b - a) * self%k
   return
