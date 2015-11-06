@@ -55,7 +55,7 @@ FORbID is aimed to be a KISS-pure-Fortran library for numerical integration of d
         + [x] Newton-Cotes' 11 points rule;
     + [ ] Gaussian quadrature formulae:
         + [x] Gauss-Legendre formulae:
-        + [ ] Gauss-Kronrod formulae:
+        + [x] Gauss-Kronrod formulae:
         + [ ] Montecarlo schemes for multidimensional function;
         + [ ] acceleration methods;
     + [ ] Integration formulas of interpolatory type:
