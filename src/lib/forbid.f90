@@ -8,6 +8,7 @@ module FORbID
 use FORbID_adt_integrand,            only : integrand
 use FORbID_integrator_newton-cotes,  only : newton-cotes_integrator
 use FORbID_integrator_gauss,         only : gauss_integrator
+use FORbID_integrator_fejer,         only : fejer_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -16,5 +17,6 @@ private
 public :: integrand
 public :: newton-cotes_integrator
 public :: gauss_integrator
+public :: fejer_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 endmodule FORbID

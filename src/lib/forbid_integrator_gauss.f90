@@ -75,7 +75,7 @@ type :: gauss_integrator
   !< FORbID integrator: provide the Gaussian quadrature.
   !<
   !< @note The integrator must be initialized (initialize the coefficient and the weights) before used.
-  character(*), allocatable :: q        !< Quadrature index: KOR -> Konrod quadrature, LEG -> Legendre quadrature.
+  character(*), allocatable :: q        !< Quadrature index: KRO -> Kronrod quadrature, LEG -> Legendre quadrature.
   integer(I_P),             :: n        !< Number of points of the quadrature.
   real(R_P), allocatable    :: w        !< Integration weights.
   real(R_P), allocatable    :: x        !< Integration nodes.
@@ -177,7 +177,7 @@ contains
       self%x(10) = -0.9782286581460570_R_P;  self%w(10) = 0.0556685671161737_R_P
       self%x(11) =  0.9782286581460570_R_P;  self%w(11) = 0.0556685671161737_R_P
     endselect
-  case('KON')
+  case('KRO')
     if (allocated(self%w)) deallocate(self%w); allocate(self%w(1:2*n+1)); self%w = 0._R_P
     if (allocated(self%x)) deallocate(self%x); allocate(self%x(1:2*n+1)); self%x = 0._R_P
     select case(n)
@@ -341,7 +341,7 @@ contains
 
   function integrate(self, f, a, b) result(integral)
   !---------------------------------------------------------------------------------------------------------------------------------
-  !< Integrate function *f* with one of the Newton-Cotes' formula chosed.
+  !< Integrate function *f* with one of the Gauss quadrature chosed.
   !---------------------------------------------------------------------------------------------------------------------------------
   class(gauss_integrator), intent(IN) :: self     !< Actual Gaussian integrator.
   class(integrand),               intent(IN) :: f        !< Function to be integrated.
