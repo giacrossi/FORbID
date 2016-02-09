@@ -6,19 +6,19 @@ module FORbID
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 use FORbID_adt_integrand,              only : integrand
-use FORbID_integrator_newton-cotes,    only : newton-cotes_integrator
+use FORbID_integrator_newton_cotes,    only : newton_cotes_integrator
 use FORbID_integrator_gauss,           only : gauss_integrator
 use FORbID_integrator_fejer,           only : fejer_integrator
-use FORbID_integrator_clenshaw-curtis, only : clenshaw-curtis_integrator
+use FORbID_integrator_clenshaw_curtis, only : clenshaw_curtis_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
 private
 public :: integrand
-public :: newton-cotes_integrator
+public :: newton_cotes_integrator
 public :: gauss_integrator
 public :: fejer_integrator
-public :: clenshaw-curtis_integrator
+public :: clenshaw_curtis_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 endmodule FORbID

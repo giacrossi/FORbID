@@ -1,5 +1,5 @@
 !< FORbID integrator: provide the Gaussian quadrature formulas.
-module FORbID_integrator_gaussian
+module FORbID_integrator_gauss
 !-----------------------------------------------------------------------------------------------------------------------------------
 !< FORbID integrator: provide the Gaussian quadrature formulas.
 !<
@@ -75,10 +75,10 @@ type :: gauss_integrator
   !< FORbID integrator: provide the Gaussian quadrature.
   !<
   !< @note The integrator must be initialized (initialize the coefficient and the weights) before used.
-  character(*), allocatable :: q        !< Quadrature index: KRO -> Kronrod quadrature, LEG -> Legendre quadrature.
-  integer(I_P),             :: n        !< Number of points of the quadrature.
-  real(R_P), allocatable    :: w        !< Integration weights.
-  real(R_P), allocatable    :: x        !< Integration nodes.
+  character(3), allocatable :: q        !< Quadrature index: KRO -> Kronrod quadrature, LEG -> Legendre quadrature.
+  integer(I_P)              :: n        !< Number of points of the quadrature.
+  real(R_P), allocatable    :: w(:)     !< Integration weights.
+  real(R_P), allocatable    :: x(:)     !< Integration nodes.
   contains
     procedure, pass(self), public :: init      !< Initialize the integrator.
     procedure, nopass,     public :: integrate !< Integrate integrand function.
@@ -360,4 +360,4 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction integrate
-endmodule FORbID_integrator_gaussian
+endmodule FORbID_integrator_gauss

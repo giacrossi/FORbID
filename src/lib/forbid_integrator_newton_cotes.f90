@@ -1,5 +1,5 @@
 !< FORbID integrator: provide the Newton-Cotes formulas.
-module FORbID_integrator_newton-cotes
+module FORbID_integrator_newton_cotes
 !-----------------------------------------------------------------------------------------------------------------------------------
 !< FORbID integrator: provide the Newton-Cotes formulas.
 !<
@@ -107,28 +107,28 @@ use FORbID_adt_integrand, only : integrand
 !-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
 private
-public :: newton-cotes_integrator
+public :: newton_cotes_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-type :: newton-cotes_integrator
+type :: newton_cotes_integrator
   !< FORbID integrator: provide the Newton-Cotes rule.
   !<
   !< @note The integrator must be initialized (initialize the coefficient and the weights) before used.
-  integer(I_P),          :: n        !< Degree of integration formula.
-  real(I_P),             :: k        !< Coefficient for integration.
-  real(R_P), allocatable :: w        !< Integration weights.
+  integer(I_P)           :: n        !< Degree of integration formula.
+  real(I_P)              :: k        !< Coefficient for integration.
+  real(R_P), allocatable :: w(:)     !< Integration weights.
   contains
     procedure, pass(self), public :: init      !< Initialize the integrator.
     procedure, nopass,     public :: integrate !< Integrate integrand function.
-endtype newton-cotes_integrator
+endtype newton_cotes_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
   elemental subroutine init(self, n)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Create the Newton-Cotes integration formula: initialize the weights and the coefficient k.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(newton-cotes_integrator), intent(INOUT) :: self   !< Newton-Cotes integrator.
+  class(newton_cotes_integrator), intent(INOUT) :: self   !< Newton-Cotes integrator.
   integer(I_P),                   intent(IN)    :: n      !< Degree of integration formula.
   self%n = n
   self%k = 0._I_P
@@ -206,7 +206,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Integrate function *f* with one of the Newton-Cotes' formula chosed.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(newton-cotes_integrator), intent(IN) :: self     !< Actual Newton-Cotes integrator.
+  class(newton_cotes_integrator), intent(IN) :: self     !< Actual Newton-Cotes integrator.
   class(integrand),               intent(IN) :: f        !< Function to be integrated.
   real(R_P),                      intent(IN) :: a        !< Lower bound.
   real(R_P),                      intent(IN) :: b        !< Upper bound.
@@ -217,10 +217,10 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   integral = 0._R_P
   do i=0,self%n
-    integral = integral + self%w(i+1_I_P) * f%f(a + i*(b-a)/n)
+    integral = integral + self%w(i+1_I_P) * f%f(a + i*(b-a)/self%n)
   enddo
   integral = integral * (b - a) * self%k
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction integrate
-endmodule FORbID_integrator_newton-cotes
+endmodule FORbID_integrator_newton_cotes

@@ -6,27 +6,28 @@ program integrate_sin
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 use FORbID_kinds, only : R_P
-use type_sin, only : sinf
-use FORbID, only : trapezoidal_integrator
+use type_sin,     only : sinf
+use FORbID,       only : newton_cotes_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
-real(R_P), parameter         :: pi=4._R_P * atan(1._R_P)
-type(sinf)                   :: sin_field
-type(trapezoidal_integrator) :: integrator
-real(R_P)                    :: integral
-real(R_P)                    :: delta
-integer, parameter           :: Ni=100
-integer                      :: i
+real(R_P), parameter          :: pi=4._R_P * atan(1._R_P)
+type(sinf)                    :: sin_field
+type(newton_cotes_integrator) :: integrator
+real(R_P)                     :: integral
+real(R_P)                     :: delta
+integer, parameter            :: Ni=100
+integer                       :: i
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 call sin_field%init(w=1._R_P)
+call integrator%init(n=1)
 integral = 0._R_P
 delta = pi/Ni
 do i=1, Ni
-  integral = integral + integrator%integrate(f=sin_field, a=(i-1)*delta, b=i*delta)
+  integral = integral + integrator%integrate(integrator, f=sin_field, a=(i-1)*delta, b=i*delta)
 enddo
 print*, integral
 stop

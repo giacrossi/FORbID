@@ -1,5 +1,5 @@
 !< FORbID integrator: provide the Clenshaw-Curtis quadrature formulas.
-module FORbID_integrator_clenshaw-curtis
+module FORbID_integrator_clenshaw_curtis
 !-----------------------------------------------------------------------------------------------------------------------------------
 !< FORbID integrator: provide the Clenshaw-Curtis quadrature formulas.
 !<
@@ -31,33 +31,32 @@ use FORbID_adt_integrand, only : integrand
 !-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
 private
-public :: clenshaw-curtis_integrator
+public :: clenshaw_curtis_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-type :: clenshaw-curtis_integrator
+type :: clenshaw_curtis_integrator
   !< FORbID integrator: provide the Clenshaw-Curtis quadrature.
   !<
   !< @note The integrator must be initialized (initialize the coefficient and the weights) before used.
-  integer(I_P),             :: n        !< Number of points of the quadrature.
-  real(R_P), allocatable    :: w        !< Integration weights.
-  real(R_P), allocatable    :: x        !< Integration nodes.
+  integer(I_P)              :: n        !< Number of points of the quadrature.
+  real(R_P), allocatable    :: w(:)     !< Integration weights.
+  real(R_P), allocatable    :: x(:)     !< Integration nodes.
   contains
     procedure, pass(self), public :: init      !< Initialize the integrator.
     procedure, nopass,     public :: integrate !< Integrate integrand function.
-endtype clenshaw-curtis_integrator
+endtype clenshaw_curtis_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
   elemental subroutine init(self, n)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Create the Clenshaw-Curtis quadrature: initialize the weights and the roots
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(gauss_integrator), intent(INOUT) :: self                      !< Clenshaw-Curtis integrator.
-  integer(I_P),            intent(IN)    :: n                         !< Number of integration nodes.
-  real(R_P),               parameter     :: pi=4._R_P * atan(1._R_P)  !< Pi Greek.
-  real(R_P),                             :: app                       !< Dummy variable and theta_k.
-  integer(I_P),                          :: i, m                      !< Counters for cycles.
-  self%q = q
+  class(clenshaw_curtis_integrator), intent(INOUT) :: self                      !< Clenshaw-Curtis integrator.
+  integer(I_P),                      intent(IN)    :: n                         !< Number of integration nodes.
+  real(R_P),                         parameter     :: pi=4._R_P * atan(1._R_P)  !< Pi Greek.
+  real(R_P)                                        :: app                       !< Dummy variable and theta_k.
+  integer(I_P)                                     :: i, m                      !< Counters for cycles.
   self%n = n
   if (allocated(self%w)) deallocate(self%w); allocate(self%w(1:n)); self%w = 0._R_P
   if (allocated(self%x)) deallocate(self%x); allocate(self%x(1:n)); self%x = 0._R_P
@@ -66,7 +65,7 @@ contains
       self%x(i) = cos((i - 1._R_P)/(self%n - 1._R_P) * pi)
       app       = 0._R_P
       do m=1,(n-1)/2
-        app = app + 2._R_P / (4._R_P * m**2._R_P - 1._R_P) cos(2._R_P * m * ((i - 1._R_P)/(self%n - 1._R_P) * pi))
+        app = app + 2._R_P / (4._R_P * m**2._R_P - 1._R_P) * cos(2._R_P * m * ((i - 1._R_P)/(self%n - 1._R_P) * pi))
       enddo
       self%w(i) = 1._R_P - app
     enddo
@@ -77,9 +76,9 @@ contains
       self%x(i) = cos((i - 1._R_P)/(self%n - 1._R_P) * pi)
       app       = 0._R_P
       do m=1,((n-1)-1)/2
-        app = app + 2._R_P / (4._R_P * m**2._R_P - 1._R_P) cos(2._R_P * m * ((i - 1._R_P)/(self%n - 1._R_P) * pi))
+        app = app + 2._R_P / (4._R_P * m**2._R_P - 1._R_P) * cos(2._R_P * m * ((i - 1._R_P)/(self%n - 1._R_P) * pi))
       enddo
-      app = app + 1._R_P / (4._R_P * ((n-1._R_P)/2._R_P)**2._R_P - 1._R_P) cos(2._R_P * ((n-1._R_P)/2._R_P) * ((i - 1._R_P)/(self%n - 1._R_P) * pi))
+      app = app + 1._R_P / (4._R_P * ((n-1._R_P)/2._R_P)**2._R_P - 1._R_P) * cos(2._R_P * ((n-1._R_P)/2._R_P) * ((i - 1._R_P)/(self%n - 1._R_P) * pi))
       self%w(i) = 1._R_P - app
     enddo
     self%w(1) = 1._R_P / (n*(n - 2._R_P))
@@ -87,19 +86,18 @@ contains
   endif
   self%x(1) = 1._R_P
   self%x(n) = -1._R_P
-  endselect
   endsubroutine init
 
   function integrate(self, f, a, b) result(integral)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Integrate function *f* with one of the Clenshaw-Curtis's formula.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(gauss_integrator), intent(IN) :: self     !< Actual clenshaw-curtis integrator.
-  class(integrand),               intent(IN) :: f        !< Function to be integrated.
-  real(R_P),                      intent(IN) :: a        !< Lower bound.
-  real(R_P),                      intent(IN) :: b        !< Upper bound.
-  real(R_P)                                  :: integral !< Definite integral value.
-  integer(I_P)                               :: i        !< Integration index.
+  class(clenshaw_curtis_integrator), intent(IN) :: self     !< Actual clenshaw-curtis integrator.
+  class(integrand),                  intent(IN) :: f        !< Function to be integrated.
+  real(R_P),                         intent(IN) :: a        !< Lower bound.
+  real(R_P),                         intent(IN) :: b        !< Upper bound.
+  real(R_P)                                     :: integral !< Definite integral value.
+  integer(I_P)                                  :: i        !< Integration index.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -111,4 +109,4 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction integrate
-endmodule FORbID_integrator_clenshaw-curtis
+endmodule FORbID_integrator_clenshaw_curtis

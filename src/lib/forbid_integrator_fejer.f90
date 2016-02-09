@@ -45,9 +45,9 @@ type :: fejer_integrator
   !< FORbID integrator: provide the Fejer quadrature.
   !<
   !< @note The integrator must be initialized (initialize the coefficient and the weights) before used.
-  integer(I_P),             :: n        !< Number of points of the quadrature.
-  real(R_P), allocatable    :: w        !< Integration weights.
-  real(R_P), allocatable    :: x        !< Integration nodes.
+  integer(I_P)              :: n        !< Number of points of the quadrature.
+  real(R_P), allocatable    :: w(:)     !< Integration weights.
+  real(R_P), allocatable    :: x(:)     !< Integration nodes.
   contains
     procedure, pass(self), public :: init      !< Initialize the integrator.
     procedure, nopass,     public :: integrate !< Integrate integrand function.
@@ -58,12 +58,11 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Create the Fejer quadrature: initialize the weights and the roots
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(gauss_integrator), intent(INOUT) :: self                      !< Fejer integrator.
+  class(fejer_integrator), intent(INOUT) :: self                      !< Fejer integrator.
   integer(I_P),            intent(IN)    :: n                         !< Number of integration nodes.
   real(R_P),               parameter     :: pi=4._R_P * atan(1._R_P)  !< Pi Greek.
-  real(R_P),                             :: app, theta                !< Dummy variable and theta_k.
-  integer(I_P),                          :: i, m                      !< Counters for cycles.
-  self%q = q
+  real(R_P)                              :: app, theta                !< Dummy variable and theta_k.
+  integer(I_P)                           :: i, m                      !< Counters for cycles.
   self%n = n
   if (allocated(self%w)) deallocate(self%w); allocate(self%w(1:n)); self%w = 0._R_P
   if (allocated(self%x)) deallocate(self%x); allocate(self%x(1:n)); self%x = 0._R_P
@@ -88,14 +87,13 @@ contains
       self%w(i) = app * (4._R_P * sin(theta)) / (self%n + 1._R_P)
     enddo
   endif
-  endselect
   endsubroutine init
 
   function integrate(self, f, a, b) result(integral)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Integrate function *f* with one of the Fejer's formula.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(gauss_integrator), intent(IN) :: self     !< Actual fejer integrator.
+  class(fejer_integrator),        intent(IN) :: self     !< Actual fejer integrator.
   class(integrand),               intent(IN) :: f        !< Function to be integrated.
   real(R_P),                      intent(IN) :: a        !< Lower bound.
   real(R_P),                      intent(IN) :: b        !< Upper bound.
