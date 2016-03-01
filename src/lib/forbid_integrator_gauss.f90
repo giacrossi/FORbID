@@ -92,8 +92,8 @@ contains
   class(gauss_integrator), intent(INOUT) :: self   !< Gaussian integrator.
   character(*),            intent(IN)    :: q      !< Quadrature index.
   integer(I_P),            intent(IN)    :: n      !< Number of integration nodes.
-  real(R_P),               parameter     :: pi=4._R_P * atan(1._R_P)
   integer(I_P)                           :: i      !< Counter
+  real(R_P),               parameter     :: pi=4._R_P * atan(1._R_P)
   self%q = q
   self%n = n
   select case(q)

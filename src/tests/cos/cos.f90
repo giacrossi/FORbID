@@ -23,7 +23,7 @@ integer                       :: i
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 call cos_field%init(w=1._R_P)
-call integrator%init(q='LEG',n=7)
+call integrator%init(q='CHE',n=7)
 integral = 0._R_P
 delta = pi/Ni
 do i=1, Ni
