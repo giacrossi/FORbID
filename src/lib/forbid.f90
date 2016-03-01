@@ -10,6 +10,7 @@ use FORbID_integrator_newton_cotes,    only : newton_cotes_integrator
 use FORbID_integrator_gauss,           only : gauss_integrator
 use FORbID_integrator_fejer,           only : fejer_integrator
 use FORbID_integrator_clenshaw_curtis, only : clenshaw_curtis_integrator
+use FORbID_integrator_romberg,         only : romberg_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -20,5 +21,6 @@ public :: newton_cotes_integrator
 public :: gauss_integrator
 public :: fejer_integrator
 public :: clenshaw_curtis_integrator
+public :: romberg_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 endmodule FORbID
