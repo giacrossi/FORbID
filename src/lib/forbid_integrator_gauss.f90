@@ -75,7 +75,7 @@ type :: gauss_integrator
   !< FORbID integrator: provide the Gaussian quadrature.
   !<
   !< @note The integrator must be initialized (initialize the coefficient and the weights) before used.
-  character(3), allocatable :: q        !< Quadrature index: KRO -> Kronrod quadrature, LEG -> Legendre quadrature.
+  character(3), allocatable :: q        !< Quadrature index: KRO -> Kronrod quad., LEG -> Legendre quad., CHE -> Chebyshev quad.
   integer(I_P)              :: n        !< Number of points of the quadrature.
   real(R_P), allocatable    :: w(:)     !< Integration weights.
   real(R_P), allocatable    :: x(:)     !< Integration nodes.
@@ -92,6 +92,7 @@ contains
   class(gauss_integrator), intent(INOUT) :: self   !< Gaussian integrator.
   character(*),            intent(IN)    :: q      !< Quadrature index.
   integer(I_P),            intent(IN)    :: n      !< Number of integration nodes.
+  real(R_P),               parameter     :: pi=4._R_P * atan(1._R_P)
   self%q = q
   self%n = n
   select case(q)
@@ -336,6 +337,13 @@ contains
       self%x(22) = -0.9963696138895426_R_P;  self%w(22) =  0.0097654410459608_R_P
       self%x(23) =  0.9963696138895426_R_P;  self%w(23) =  0.0097654410459608_R_P
     endselect
+  case('CHE')
+    if (allocated(self%w)) deallocate(self%w); allocate(self%w(1:n)); self%w = 0._R_P
+    if (allocated(self%x)) deallocate(self%x); allocate(self%x(1:n)); self%x = 0._R_P
+    do i=1,n
+      self%x(i) = cos((2._R_P*i - 1._R_P)/(2._R_P*n)*pi)
+      self%w(i) = (pi / n) * sqrt(1._R_P - (self%x(i))**2._R_P)
+    enddo
   endselect
   endsubroutine init
 
@@ -344,11 +352,11 @@ contains
   !< Integrate function *f* with one of the Gauss quadrature chosed.
   !---------------------------------------------------------------------------------------------------------------------------------
   class(gauss_integrator), intent(IN) :: self     !< Actual Gaussian integrator.
-  class(integrand),               intent(IN) :: f        !< Function to be integrated.
-  real(R_P),                      intent(IN) :: a        !< Lower bound.
-  real(R_P),                      intent(IN) :: b        !< Upper bound.
-  real(R_P)                                  :: integral !< Definite integral value.
-  integer(I_P)                               :: i        !< Integration index.
+  class(integrand),        intent(IN) :: f        !< Function to be integrated.
+  real(R_P),               intent(IN) :: a        !< Lower bound.
+  real(R_P),               intent(IN) :: b        !< Upper bound.
+  real(R_P)                           :: integral !< Definite integral value.
+  integer(I_P)                        :: i        !< Integration index.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
