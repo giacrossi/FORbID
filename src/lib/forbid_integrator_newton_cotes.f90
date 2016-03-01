@@ -10,7 +10,7 @@ module FORbID_integrator_newton_cotes
 !< where \(f(x)\), a generic integrand function, the problem is to perform its definite integral.
 !< The Newton-Cotes formulas can be generically expressed by the
 !<
-!< $$ \int_a^b f(x) = \frac{(b-a)}{k} \sum_{i=1}^n w_i f\left( a + i \frac{(b-a)}{n} \right)
+!< $$ \int_a^b f(x) = \frac{(b-a)}{k} \sum_{i=1}^n w_i f\left( a + i \frac{(b-a)}{n} \right) $$
 !< where $k$ is a parameter depending on the particular Newton-Cotes formula, $w_i$ are the weights also depending on the
 !< Newton-Cotes formula and $n$ is the degree of the Newton-Cotes formula.
 !<
@@ -116,7 +116,7 @@ type :: newton_cotes_integrator
   !<
   !< @note The integrator must be initialized (initialize the coefficient and the weights) before used.
   integer(I_P)           :: n        !< Degree of integration formula.
-  real(I_P)              :: k        !< Coefficient for integration.
+  real(R_P)              :: k        !< Coefficient for integration.
   real(R_P), allocatable :: w(:)     !< Integration weights.
   contains
     procedure, pass(self), public :: init      !< Initialize the integrator.
