@@ -78,7 +78,8 @@ contains
       do m=1,((n-1)-1)/2
         app = app + 2._R_P / (4._R_P * m**2._R_P - 1._R_P) * cos(2._R_P * m * ((i - 1._R_P)/(self%n - 1._R_P) * pi))
       enddo
-      app = app + 1._R_P / (4._R_P * ((n-1._R_P)/2._R_P)**2._R_P - 1._R_P) * cos(2._R_P * ((n-1._R_P)/2._R_P) * ((i - 1._R_P)/(self%n - 1._R_P) * pi))
+      app = app + 1._R_P / (4._R_P * ((n-1._R_P)/2._R_P)**2._R_P - 1._R_P) &
+          * cos(2._R_P * ((n-1._R_P)/2._R_P) * ((i - 1._R_P)/(self%n - 1._R_P) * pi))
       self%w(i) = 1._R_P - app
     enddo
     self%w(1) = 1._R_P / (n*(n - 2._R_P))
