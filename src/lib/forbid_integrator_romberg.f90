@@ -37,7 +37,6 @@ type :: romberg_integrator
   !< @note The integrator must be initialized (initialize the coefficient and the weights) before used.
   integer(I_P)           :: n        !< Degree of integration formula.
   real(R_P)              :: tol      !< Tolerance
-  real(R_P), allocatable :: R(:,:)   !< Integration results.
   contains
     procedure, pass(self), public :: init      !< Initialize the integrator.
     procedure, nopass,     public :: integrate !< Integrate integrand function.
@@ -51,7 +50,6 @@ contains
   class(romberg_integrator), intent(INOUT) :: self   !< Romberg integrator.
   integer(I_P),              intent(IN)    :: n      !< Number of extrapolations.
   real(R_P),                 intent(IN)    :: tol    !< Tolerance parameter.
-  if (allocated(self%R)) deallocate(self%R); allocate(self%R(1:n,1:n)); self%R = 0._R_P
   self%n = n
   self%tol = tol
   endsubroutine init
@@ -67,9 +65,12 @@ contains
   real(R_P)                             :: integral !< Definite integral value.
   integer(I_P)                          :: i,k      !< Integration indexes.
   real(R_P)                             :: M        !< Midpoint value.
+  real(R_P)                             :: h        !< Step size.
+  real(R_P), allocatable                :: R(:,:)   !< Integral results.
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
+  if (allocated(R)) deallocate(R); allocate(R(1:self%n,1:self%n)); R = 0._R_P
   h = b - a
   R(0,0) = h*(f%f(a) + f%f(b))/2._R_P;
   do i = 1,self%n
