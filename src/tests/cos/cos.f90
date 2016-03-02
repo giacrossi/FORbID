@@ -7,14 +7,14 @@ program integrate_cos
 !-----------------------------------------------------------------------------------------------------------------------------------
 use FORbID_kinds, only : R_P
 use type_cos,     only : cosf
-use FORbID,       only : gauss_integrator
+use FORbID,       only : romberg_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
 real(R_P), parameter          :: pi=4._R_P * atan(1._R_P)
 type(cosf)                    :: cos_field
-type(gauss_integrator)        :: integrator
+type(romberg_integrator)      :: integrator
 real(R_P)                     :: integral
 real(R_P)                     :: delta
 integer, parameter            :: Ni=100
@@ -23,7 +23,7 @@ integer                       :: i
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 call cos_field%init(w=1._R_P)
-call integrator%init(q='CHE',n=7)
+call integrator%init(n=10000,tol=10._R_P**(-6))
 integral = 0._R_P
 delta = pi/Ni
 do i=1, Ni
