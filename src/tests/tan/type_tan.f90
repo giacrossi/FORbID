@@ -1,5 +1,5 @@
 !< Define sin function that is a concrete extension of the abstract integrand type.
-module type_sin
+module type_tan
 !-----------------------------------------------------------------------------------------------------------------------------------
 !< Define sin function that is a concrete extension of the abstract integrand type.
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -12,20 +12,20 @@ use FORbID, only : integrand
 !-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
 private
-public :: sinf
+public :: tanf
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-type, extends(integrand) :: sinf
-  !< sin function.
+type, extends(integrand) :: tanf
+  !< tangent function.
   private
   real(R_P) :: w=0._R_P !< Frequency of trigonometric function.
   contains
     ! auxiliary methods
     procedure, pass(self), public :: init !< Init field.
     ! ADT integrand deferred methods
-    procedure, pass(self), public :: f => sin_x !< Time derivative, residuals.
-endtype sinf
+    procedure, pass(self), public :: f => tan_x !< Time derivative, residuals.
+endtype tanf
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
   ! auxiliary methods
@@ -33,7 +33,7 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Construct an initialized sin function.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(sinf), intent(INOUT) :: self !< sin function.
+  class(tanf), intent(INOUT) :: self !< tan function.
   real(R_P),   intent(IN)    :: w    !< Frequency.
   !---------------------------------------------------------------------------------------------------------------------------------
 
@@ -44,10 +44,10 @@ contains
   endsubroutine init
 
   ! ADT integrand deferred methods
-  function sin_x(self, x, y, z) result(f)
+  function tan_x(self, x, y, z) result(f)
   !---------------------------------------------------------------------------------------------------------------------------------
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(sinf),         intent(IN) :: self !< sin function.
+  class(tanf),         intent(IN) :: self !< tangent function.
   real(R_P),           intent(IN) :: x    !< X abscissa.
   real(R_P), optional, intent(IN) :: y    !< Y abscissa.
   real(R_P), optional, intent(IN) :: z    !< Z abscissa.
@@ -55,8 +55,8 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
 
   !---------------------------------------------------------------------------------------------------------------------------------
-  f = sin(self%w * x)
+  f = tan(self%w * x)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
-  endfunction sin_x
-endmodule type_sin
+  endfunction tan_x
+endmodule type_tan

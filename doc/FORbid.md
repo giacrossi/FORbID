@@ -1,4 +1,13 @@
-<a name="top"></a>
+project: FORbID
+project_dir: ../src
+output_dir: ../doc
+project_github: https://github.com/giacombum/FORbID
+summary: FORbID is aimed to be a KISS-pure-Fortran library for numerical integration of definite integrals.
+author: Giacomo Rossi
+github: https://github.com/giacombum
+display: public
+source: true
+graph: true
 
 # FORbID
 

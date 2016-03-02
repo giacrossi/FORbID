@@ -1,18 +1,26 @@
-!< gr, Fortran Object oriented ...
-module gr
+!< FORbID, Fortran Object oriented ...
+module FORbID
 !-----------------------------------------------------------------------------------------------------------------------------------
-!< gr, Fortran Object oriented ...
+!< FORbID, Fortran Object oriented ...
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-use gr_adt_integrand, only : integrand
-use gr_integrator_trapezoidal, only : trapezoidal_integrator
+use FORbID_adt_integrand,              only : integrand
+use FORbID_integrator_newton_cotes,    only : newton_cotes_integrator
+use FORbID_integrator_gauss,           only : gauss_integrator
+use FORbID_integrator_fejer,           only : fejer_integrator
+use FORbID_integrator_clenshaw_curtis, only : clenshaw_curtis_integrator
+use FORbID_integrator_romberg,         only : romberg_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
 private
 public :: integrand
-public :: trapezoidal_integrator
+public :: newton_cotes_integrator
+public :: gauss_integrator
+public :: fejer_integrator
+public :: clenshaw_curtis_integrator
+public :: romberg_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
-endmodule gr
+endmodule FORbID
