@@ -75,7 +75,7 @@ type :: gauss_integrator
   !< FORbID integrator: provide the Gaussian quadrature.
   !<
   !< @note The integrator must be initialized (initialize the coefficient and the weights) before used.
-  character(3), allocatable :: q        !< Quadrature index: KRO -> Kronrod quad., LEG -> Legendre quad., CHE -> Chebyshev quad.
+  character(3)              :: q        !< Quadrature index: KRO -> Kronrod quad., LEG -> Legendre quad., CHE -> Chebyshev quad.
   integer(I_P)              :: n        !< Number of points of the quadrature.
   real(R_P), allocatable    :: w(:)     !< Integration weights.
   real(R_P), allocatable    :: x(:)     !< Integration nodes.
