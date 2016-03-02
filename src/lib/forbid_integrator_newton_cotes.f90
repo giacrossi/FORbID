@@ -77,15 +77,16 @@ module FORbID_integrator_newton_cotes
 !< with
 !< $$n = 8$$
 !< $$k = \frac{4}{14175}$$
-!< $$W = \left[ {\begin{array}{*{20}{c}} 989 \\ 5888 \\ -928 \\ 10496 \\ -4540 \\ 10496 \\ -928 \\ 5888 \\ 989 \end{array}} \right]$$
+!< $$W = \left[ {\begin{array}{*{20}{c}} 989 \\ 5888 \\ -928 \\ 10496 \\ -4540 \\ 10496 \\ -928 \\ 5888 \\ 989\end{array}}\right]$$
 !<
 !<##### Newton-Cotes 10 points Rule, 9th order
 !< The formula can be written as:
-!< $$ \frac{9h}{89600} \left( 2857 (f_0 + f_9) + 15741 (f_1 + f_8) + 1080 (f_2 + f_7) + 19344 (f_3 + f_6) + 5778 (f_4 + f_5) \right)$$
+!< $$ \frac{9h}{89600} \left( 2857 (f_0 + f_9) + 15741 (f_1 + f_8) + 1080 (f_2 + f_7) + 19344 (f_3 + f_6)+5778(f_4 + f_5)\right)$$
 !< with
 !< $$n = 9$$
 !< $$k = \frac{4}{14175}$$
-!< $$W = \left[ {\begin{array}{*{20}{c}} 2857 \\ 15741 \\ 1080 \\ 19344 \\ 5778 \\ 5778 \\ 19344 \\ 1080 \\ 15741 \\ 2857 \end{array}} \right]$$
+!< $$W = \left[{\begin{array}{*{20}{c}}2857 \\ 15741 \\ 1080 \\ 19344 \\ 5778 \\ 5778 \\ 19344 \\ 1080 \\ 15741 \\ 2857
+!< \end{array}}\right]$$
 !<
 !<##### Newton-Cotes 11 points Rule, 10th order
 !< The formula can be written as:
