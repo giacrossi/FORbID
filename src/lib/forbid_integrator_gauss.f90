@@ -82,6 +82,7 @@ type :: gauss_integrator
   contains
     procedure, pass(self), public :: init      !< Initialize the integrator.
     procedure, nopass,     public :: integrate !< Integrate integrand function.
+    procedure, nopass,     public :: adaptive_integrate !< Integrate adaptively integrand function with trapezoidal rule.
 endtype gauss_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
@@ -369,4 +370,30 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction integrate
+
+  recursive subroutine adaptive_integrate(self, f, a, b, b_orig, tol, ad_integral)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Integrate adaptively function *f* with one of the Gauss' formula chosed.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(newton_cotes_integrator), intent(IN)  :: self                  !< Actual Gauss integrator.
+  class(integrand),               intent(IN)  :: f                     !< Function to be integrated.
+  real(R_P),                      intent(IN)  :: a, b                  !< Lower and Upper bounds.
+  real(R_P),                      intent(IN)  :: b_orig                !< Original upper bound.
+  real(R_P),                      intent(IN)  :: tol                   !< Tolerance error.
+  real(R_P),                      intent(OUT) :: ad_integral           !< Definite integral value.
+  real(R_P)                                   :: h                     !< Integration step.
+  real(R_P)                                   :: first_int, second_int !< Temporary integration results.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  h = (b - a) / 2._R_P
+  first_int  = self%integrate(self, f=f, a=a, b=b)
+  second_int = self%integrate(self, f=f, a=a, b=a+h) + self%integrate(self, f=f, a=a+h, b=b)
+  if ((abs(second_int - first_int))<tol) then
+    ad_integral = second_int + ad_integral
+    if ((b_orig - b)>tol) call adaptive_integrate(self, f=f, a=b, b=a+2._R_P*h, tol=tol, b_orig=b_orig, ad_integral=ad_integral)
+  else
+    call adaptive_integrate(self, f=f, a=a, b=a+h, tol=tol/2._R_P, b_orig=b_orig, ad_integral=ad_integral)
+  endif
+  end subroutine adaptive_integrate
 endmodule FORbID_integrator_gauss
