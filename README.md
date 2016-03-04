@@ -63,10 +63,7 @@ FORbID is aimed to be a KISS-pure-Fortran library for numerical integration of d
     + [x] Integration formulas of interpolatory type:
         + [x] Fejér interpolation formula;
         + [x] Clenshaw-Curtis interpolation formula;
-    + [ ] Adaptive quadrature
-        + [ ] midpoint adaptive quadrature;
-        + [ ] trapezoidal adaptive quadrature;
-        + [ ] Simpson's adaptive quadrature;
+    + [x] Adaptive quadrature
 + [ ] efficient:
     + [ ] high scalability on parallel architectures:
         + [ ] support for shared memory multi/many cores architecture;
