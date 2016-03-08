@@ -61,7 +61,8 @@ module FORbID_integrator_gauss
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 use FORbID_kinds, only : R_P, I_P
-use FORbID_adt_integrand, only : integrand
+use FORbID_adt_integrand,  only : integrand
+use FORbID_adt_integrator, only : adaptive_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -71,33 +72,31 @@ public :: gauss_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-type :: gauss_integrator
+type, extends(adaptive_integrator) :: gauss_integrator
   !< FORbID integrator: provide the Gaussian quadrature.
   !<
   !< @note The integrator must be initialized (initialize the coefficient and the weights) before used.
   character(3)              :: q        !< Quadrature index: KRO -> Kronrod quad., LEG -> Legendre quad., CHE -> Chebyshev quad.
-  integer(I_P)              :: n        !< Number of points of the quadrature.
   real(R_P), allocatable    :: w(:)     !< Integration weights.
   real(R_P), allocatable    :: x(:)     !< Integration nodes.
   contains
     procedure, pass(self), public :: init      !< Initialize the integrator.
-    procedure, nopass,     public :: integrate !< Integrate integrand function.
-    procedure, nopass,     public :: adaptive_integrate !< Integrate adaptively integrand function with trapezoidal rule.
+    procedure, pass(self), public :: integrate !< Integrate integrand function.
 endtype gauss_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
-  elemental subroutine init(self, q, n)
+  elemental subroutine init(self, n, q)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Create the Gaussian quadrature: initialize the weights and the roots
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(gauss_integrator), intent(INOUT) :: self   !< Gaussian integrator.
-  character(*),            intent(IN)    :: q      !< Quadrature index.
-  integer(I_P),            intent(IN)    :: n      !< Number of integration nodes.
-  integer(I_P)                           :: i      !< Counter
+  class(gauss_integrator), intent(INOUT) :: self         !< Gaussian integrator.
+  integer(I_P),            intent(IN)    :: n            !< Number of integration nodes.
+  character(*),            intent(IN)    :: q            !< Quadrature index.
+  integer(I_P)                           :: i            !< Counter
   real(R_P),               parameter     :: pi=4._R_P * atan(1._R_P)
   self%q = q
   self%n = n
-  select case(q)
+  select case(self%q)
   case('LEG')
     if (allocated(self%w)) deallocate(self%w); allocate(self%w(1:n)); self%w = 0._R_P
     if (allocated(self%x)) deallocate(self%x); allocate(self%x(1:n)); self%x = 0._R_P
@@ -370,30 +369,5 @@ contains
   return
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction integrate
-
-  recursive subroutine adaptive_integrate(self, f, a, b, b_orig, tol, ad_integral)
-  !---------------------------------------------------------------------------------------------------------------------------------
-  !< Integrate adaptively function *f* with one of the Gauss' formula chosed.
-  !---------------------------------------------------------------------------------------------------------------------------------
-  class(newton_cotes_integrator), intent(IN)  :: self                  !< Actual Gauss integrator.
-  class(integrand),               intent(IN)  :: f                     !< Function to be integrated.
-  real(R_P),                      intent(IN)  :: a, b                  !< Lower and Upper bounds.
-  real(R_P),                      intent(IN)  :: b_orig                !< Original upper bound.
-  real(R_P),                      intent(IN)  :: tol                   !< Tolerance error.
-  real(R_P),                      intent(OUT) :: ad_integral           !< Definite integral value.
-  real(R_P)                                   :: h                     !< Integration step.
-  real(R_P)                                   :: first_int, second_int !< Temporary integration results.
-  !---------------------------------------------------------------------------------------------------------------------------------
-
-  !---------------------------------------------------------------------------------------------------------------------------------
-  h = (b - a) / 2._R_P
-  first_int  = self%integrate(self, f=f, a=a, b=b)
-  second_int = self%integrate(self, f=f, a=a, b=a+h) + self%integrate(self, f=f, a=a+h, b=b)
-  if ((abs(second_int - first_int))<tol) then
-    ad_integral = second_int + ad_integral
-    if ((b_orig - b)>tol) call adaptive_integrate(self, f=f, a=b, b=a+2._R_P*h, tol=tol, b_orig=b_orig, ad_integral=ad_integral)
-  else
-    call adaptive_integrate(self, f=f, a=a, b=a+h, tol=tol/2._R_P, b_orig=b_orig, ad_integral=ad_integral)
-  endif
-  end subroutine adaptive_integrate
+!-----------------------------------------------------------------------------------------------------------------------------------
 endmodule FORbID_integrator_gauss

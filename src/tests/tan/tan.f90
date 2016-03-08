@@ -26,7 +26,7 @@ call tan_field%init(w=1._R_P)
 integral = 0._R_P
 delta = pi/Ni
 do i=1, Ni
-  integral = integral + integrator%integrate(integrator, f=tan_field, a=(i-1)*delta, b=i*delta)
+  integral = integral + integrator%integrate(f=tan_field, a=(i-1)*delta, b=i*delta)
 enddo
 print*, integral
 stop

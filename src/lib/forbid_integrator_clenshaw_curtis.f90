@@ -25,7 +25,8 @@ module FORbID_integrator_clenshaw_curtis
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 use FORbID_kinds, only : R_P, I_P
-use FORbID_adt_integrand, only : integrand
+use FORbID_adt_integrand, only  : integrand
+use FORbID_adt_integrator, only : integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -35,16 +36,15 @@ public :: clenshaw_curtis_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-type :: clenshaw_curtis_integrator
+type, extends(integrator) :: clenshaw_curtis_integrator
   !< FORbID integrator: provide the Clenshaw-Curtis quadrature.
   !<
   !< @note The integrator must be initialized (initialize the coefficient and the weights) before used.
-  integer(I_P)              :: n        !< Number of points of the quadrature.
   real(R_P), allocatable    :: w(:)     !< Integration weights.
   real(R_P), allocatable    :: x(:)     !< Integration nodes.
   contains
     procedure, pass(self), public :: init      !< Initialize the integrator.
-    procedure, nopass,     public :: integrate !< Integrate integrand function.
+    procedure, pass(self), public :: integrate !< Integrate integrand function.
 endtype clenshaw_curtis_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains

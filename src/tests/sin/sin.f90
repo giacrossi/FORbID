@@ -27,7 +27,7 @@ call integrator%init(n=1)
 integral = 0._R_P
 delta = pi/Ni
 do i=1, Ni
-  integral = integral + integrator%integrate(integrator, f=sin_field, a=(i-1)*delta, b=i*delta)
+  integral = integral + integrator%integrate(f=sin_field, a=(i-1)*delta, b=i*delta)
 enddo
 print*, integral
 stop

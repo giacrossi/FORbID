@@ -29,7 +29,7 @@ integral = 0._R_P
 !do i=1, Ni
 !  integral = integral + integrator%integrate(integrator, f=cos_field, a=(i-1)*delta, b=i*delta)
 !enddo
-call integrator%adaptive_integrate(integrator, f=cos_field, a=0._R_P, b=pi, b_orig=pi, tol=10._R_P**(-6), ad_integral=integral)
+call integrator%adaptive_integrate(f=cos_field, a=0._R_P, b=pi, b_orig=pi, tol=10._R_P**(-6), ad_integral=integral)
 print*, integral
 stop
 !-----------------------------------------------------------------------------------------------------------------------------------

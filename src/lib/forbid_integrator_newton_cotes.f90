@@ -103,6 +103,7 @@ module FORbID_integrator_newton_cotes
 !-----------------------------------------------------------------------------------------------------------------------------------
 use FORbID_kinds, only : R_P, I_P
 use FORbID_adt_integrand, only : integrand
+use FORbID_adt_integrator, only : adaptive_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -112,17 +113,15 @@ public :: newton_cotes_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-type :: newton_cotes_integrator
+type, extends(adaptive_integrator) :: newton_cotes_integrator
   !< FORbID integrator: provide the Newton-Cotes rule.
   !<
   !< @note The integrator must be initialized (initialize the coefficient and the weights) before used.
-  integer(I_P)           :: n        !< Degree of integration formula.
   real(R_P)              :: k        !< Coefficient for integration.
   real(R_P), allocatable :: w(:)     !< Integration weights.
   contains
     procedure, pass(self), public :: init      !< Initialize the integrator.
-    procedure, nopass,     public :: integrate !< Integrate integrand function.
-    procedure, nopass,     public :: adaptive_integrate !< Integrate adaptively integrand function with trapezoidal rule.
+    procedure, pass(self), public :: integrate !< Integrate integrand function.
 endtype newton_cotes_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
@@ -130,8 +129,8 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Create the Newton-Cotes integration formula: initialize the weights and the coefficient k.
   !---------------------------------------------------------------------------------------------------------------------------------
-  class(newton_cotes_integrator), intent(INOUT) :: self   !< Newton-Cotes integrator.
-  integer(I_P),                   intent(IN)    :: n      !< Degree of integration formula.
+  class(newton_cotes_integrator), intent(INOUT) :: self         !< Newton-Cotes integrator.
+  integer(I_P),                   intent(IN)    :: n            !< Degree of integration formula.
   self%n = n
   self%k = 0._I_P
   if (allocated(self%w)) deallocate(self%w); allocate(self%w(1:n+1)); self%w = 0._R_P
@@ -226,29 +225,29 @@ contains
   !---------------------------------------------------------------------------------------------------------------------------------
   endfunction integrate
 
-  recursive subroutine adaptive_integrate(self, f, a, b, b_orig, tol, ad_integral)
-  !---------------------------------------------------------------------------------------------------------------------------------
-  !< Integrate adaptively function *f* with one of the Newton-Cotes' formula chosed.
-  !---------------------------------------------------------------------------------------------------------------------------------
-  class(newton_cotes_integrator), intent(IN)  :: self                  !< Actual Newton-Cotes integrator.
-  class(integrand),               intent(IN)  :: f                     !< Function to be integrated.
-  real(R_P),                      intent(IN)  :: a, b                  !< Lower and Upper bounds.
-  real(R_P),                      intent(IN)  :: b_orig                !< Original upper bound.
-  real(R_P),                      intent(IN)  :: tol                   !< Tolerance error.
-  real(R_P),                      intent(OUT) :: ad_integral           !< Definite integral value.
-  real(R_P)                                   :: h                     !< Integration step.
-  real(R_P)                                   :: first_int, second_int !< Temporary integration results.
-  !---------------------------------------------------------------------------------------------------------------------------------
-
-  !---------------------------------------------------------------------------------------------------------------------------------
-  h = (b - a) / 2._R_P
-  first_int  = self%integrate(self, f=f, a=a, b=b)
-  second_int = self%integrate(self, f=f, a=a, b=a+h) + self%integrate(self, f=f, a=a+h, b=b)
-  if ((abs(second_int - first_int))<tol) then
-    ad_integral = second_int + ad_integral
-    if ((b_orig - b)>tol) call adaptive_integrate(self, f=f, a=b, b=a+2._R_P*h, tol=tol, b_orig=b_orig, ad_integral=ad_integral)
-  else
-    call adaptive_integrate(self, f=f, a=a, b=a+h, tol=tol/2._R_P, b_orig=b_orig, ad_integral=ad_integral)
-  endif
-  end subroutine adaptive_integrate
+!  recursive subroutine adaptive_integrate(self, f, a, b, b_orig, tol, ad_integral)
+!  !---------------------------------------------------------------------------------------------------------------------------------
+!  !< Integrate adaptively function *f* with one of the Newton-Cotes' formula chosed.
+!  !---------------------------------------------------------------------------------------------------------------------------------
+!  class(newton_cotes_integrator), intent(IN)  :: self                  !< Actual Newton-Cotes integrator.
+!  class(integrand),               intent(IN)  :: f                     !< Function to be integrated.
+!  real(R_P),                      intent(IN)  :: a, b                  !< Lower and Upper bounds.
+!  real(R_P),                      intent(IN)  :: b_orig                !< Original upper bound.
+!  real(R_P),                      intent(IN)  :: tol                   !< Tolerance error.
+!  real(R_P),                      intent(OUT) :: ad_integral           !< Definite integral value.
+!  real(R_P)                                   :: h                     !< Integration step.
+!  real(R_P)                                   :: first_int, second_int !< Temporary integration results.
+!  !---------------------------------------------------------------------------------------------------------------------------------
+!
+!  !---------------------------------------------------------------------------------------------------------------------------------
+!  h = (b - a) / 2._R_P
+!  first_int  = self%integrate(self, f=f, a=a, b=b)
+!  second_int = self%integrate(self, f=f, a=a, b=a+h) + self%integrate(self, f=f, a=a+h, b=b)
+!  if ((abs(second_int - first_int))<tol) then
+!    ad_integral = second_int + ad_integral
+!    if ((b_orig - b)>tol) call adaptive_integrate(self, f=f, a=b, b=a+2._R_P*h, tol=tol, b_orig=b_orig, ad_integral=ad_integral)
+!  else
+!    call adaptive_integrate(self, f=f, a=a, b=a+h, tol=tol/2._R_P, b_orig=b_orig, ad_integral=ad_integral)
+!  endif
+!  end subroutine adaptive_integrate
 endmodule FORbID_integrator_newton_cotes
