@@ -21,13 +21,17 @@ type, abstract :: integrator
   integer(I_P)           :: n        !< numbers of points of the quadrature (Gauss, Cleshaw-Curtis), degree of integration formula
                                      !< (Newton-Cotes, Romberg).
   contains
+    ! public methods
+    generic :: integrate => integrate_1D, integrate_2D, integrate_3D
     !< Deferred procedures that concrete integrator must implement
-    procedure(abstract_integrate), pass(self), deferred, public :: integrate
+    procedure(abstract_integrate_1D), pass(self), deferred, public :: integrate_1D !< Compute integration in one dimension.
+    procedure(abstract_integrate_2D), pass(self), deferred, public :: integrate_2D !< Compute integration in two dimensions.
+    procedure(abstract_integrate_3D), pass(self), deferred, public :: integrate_3D !< Compute integration in three dimensions.
 endtype integrator
 
 abstract interface
   !< Abstract type bound procedure necessary for implementing a concrete extension of the class(integrator).
-  function abstract_integrate(self, f, a, b) result(integral)
+  function abstract_integrate_1D(self, f, a, b) result(integral)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Integrate function *f* with one of the integrator chosed.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -38,7 +42,39 @@ abstract interface
   real(R_P),         intent(IN)  :: b        !< Upper bound.
   real(R_P)                      :: integral !< Result of the definite integral.
   !---------------------------------------------------------------------------------------------------------------------------------
-  endfunction abstract_integrate
+  endfunction abstract_integrate_1D
+
+  function abstract_integrate_2D(self, f, a, b, c, d) result(integral)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Integrate function *f* with one of the integrator chosed.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  import :: integrator, integrand, R_P
+  class(integrator), intent(IN)  :: self     !< Actual integrator.
+  class(integrand),  intent(IN)  :: f        !< Integrand field.
+  real(R_P),         intent(IN)  :: a        !< Lower bound, first variable.
+  real(R_P),         intent(IN)  :: b        !< Upper bound, first variable.
+  real(R_P),         intent(IN)  :: c        !< Lower bound, second variable.
+  real(R_P),         intent(IN)  :: d        !< Upper bound, second variable.
+  real(R_P)                      :: integral !< Result of the definite integral.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction abstract_integrate_2D
+
+  function abstract_integrate_3D(self, f, a, b, c, d, g, h) result(integral)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Integrate function *f* with one of the integrator chosed.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  import :: integrator, integrand, R_P
+  class(integrator), intent(IN)  :: self     !< Actual integrator.
+  class(integrand),  intent(IN)  :: f        !< Integrand field.
+  real(R_P),         intent(IN)  :: a        !< Lower bound, first variable.
+  real(R_P),         intent(IN)  :: b        !< Upper bound, first variable.
+  real(R_P),         intent(IN)  :: c        !< Lower bound, second variable.
+  real(R_P),         intent(IN)  :: d        !< Upper bound, second variable.
+  real(R_P),         intent(IN)  :: g        !< Lower bound, third variable.
+  real(R_P),         intent(IN)  :: h        !< Upper bound, third variable.
+  real(R_P)                      :: integral !< Result of the definite integral.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction abstract_integrate_3D
 endinterface
 
 type, extends(integrator), abstract :: adaptive_integrator

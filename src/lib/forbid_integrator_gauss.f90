@@ -79,19 +79,24 @@ type, extends(adaptive_integrator) :: gauss_integrator
   character(3)              :: q        !< Quadrature index: KRO -> Kronrod quad., LEG -> Legendre quad., CHE -> Chebyshev quad.
   real(R_P), allocatable    :: w(:)     !< Integration weights.
   real(R_P), allocatable    :: x(:)     !< Integration nodes.
+  real(R_P), allocatable    :: y(:)     !< Integration nodes.
+  real(R_P), allocatable    :: z(:)     !< Integration nodes.
   contains
-    procedure, pass(self), public :: init      !< Initialize the integrator.
-    procedure, pass(self), public :: integrate !< Integrate integrand function.
+    procedure, pass(self), public :: init         !< Initialize the integrator.
+    procedure, pass(self), public :: integrate_1D !< Integrate 1D integrand function.
+    procedure, pass(self), public :: integrate_2D !< Integrate 2D integrand function.
+    procedure, pass(self), public :: integrate_3D !< Integrate 3D integrand function.
 endtype gauss_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
-  elemental subroutine init(self, n, q)
+  elemental subroutine init(self, n, q, d)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Create the Gaussian quadrature: initialize the weights and the roots
   !---------------------------------------------------------------------------------------------------------------------------------
   class(gauss_integrator), intent(INOUT) :: self         !< Gaussian integrator.
   integer(I_P),            intent(IN)    :: n            !< Number of integration nodes.
   character(*),            intent(IN)    :: q            !< Quadrature index.
+  integer(I_P),            intent(IN)    :: d            !< Number of integration dimensions.
   integer(I_P)                           :: i            !< Counter
   real(R_P),               parameter     :: pi=4._R_P * atan(1._R_P)
   self%q = q
@@ -438,10 +443,17 @@ contains
       self%x(i) = cos((2._R_P*i - 1._R_P)/(2._R_P*n)*pi)
       self%w(i) = (pi / n) * sqrt(1._R_P - (self%x(i))**2._R_P)
     enddo
+  select case(d)
+  case(2)
+    if (allocated(self%y)) deallocate(self%y); allocate(self%y(1:n)); self%y = self%x
+  case(3)
+    if (allocated(self%y)) deallocate(self%y); allocate(self%y(1:n)); self%y = self%x
+    if (allocated(self%z)) deallocate(self%z); allocate(self%z(1:n)); self%z = self%x
+  endselect
   endselect
   endsubroutine init
 
-  function integrate(self, f, a, b) result(integral)
+  function integrate_1D(self, f, a, b) result(integral)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Integrate function *f* with one of the Gauss quadrature chosed.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -461,6 +473,65 @@ contains
   integral = integral * (b - a) / 2.0_R_P
   return
   !---------------------------------------------------------------------------------------------------------------------------------
-  endfunction integrate
+  endfunction integrate_1D
+
+  function integrate_2D(self, f, a, b, c, d) result(integral)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Integrate function *f* with one of the Gauss quadrature chosed.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(gauss_integrator), intent(IN) :: self     !< Actual Gaussian integrator.
+  class(integrand),        intent(IN) :: f        !< Function to be integrated.
+  real(R_P),               intent(IN) :: a        !< Lower bound, First Variable.
+  real(R_P),               intent(IN) :: b        !< Upper bound, First Variable.
+  real(R_P),               intent(IN) :: c        !< Lower bound, Second Variable.
+  real(R_P),               intent(IN) :: d        !< Upper bound, Second Variable.
+  real(R_P)                           :: integral !< Definite integral value.
+  integer(I_P)                        :: i, j     !< Integration indexes.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  integral = 0._R_P
+  do j=1,self%n
+    do i=1,self%n
+      integral = integral + self%w(i) * self%w(j) * f%f(self%x(i)*(b-a)/2._R_P + (a+b)/2._R_P) * &
+                                                    f%f(self%y(j)*(d-c)/2._R_P + (d+c)/2._R_P)
+    enddo
+  enddo
+  integral = integral * (b - a) / 2.0_R_P * (d - c) / 2.0_R_P
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction integrate_2D
+
+  function integrate_3D(self, f, a, b, c, d, g, h) result(integral)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Integrate function *f* with one of the Gauss quadrature chosed.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(gauss_integrator), intent(IN) :: self     !< Actual Gaussian integrator.
+  class(integrand),        intent(IN) :: f        !< Function to be integrated.
+  real(R_P),               intent(IN) :: a        !< Lower bound, First Variable.
+  real(R_P),               intent(IN) :: b        !< Upper bound, First Variable.
+  real(R_P),               intent(IN) :: c        !< Lower bound, Second Variable.
+  real(R_P),               intent(IN) :: d        !< Upper bound, Second Variable.
+  real(R_P),               intent(IN) :: g        !< Lower bound, Third Variable.
+  real(R_P),               intent(IN) :: h        !< Upper bound, Third Variable.
+  real(R_P)                           :: integral !< Definite integral value.
+  integer(I_P)                        :: i, j, k  !< Integration indexes.
+  !---------------------------------------------------------------------------------------------------------------------------------
+
+  !---------------------------------------------------------------------------------------------------------------------------------
+  integral = 0._R_P
+  do k=1,self%n
+    do j=1,self%n
+      do i=1,self%n
+        integral = integral + self%w(i) * self%w(j) * self%w(k) * f%f(self%x(i)*(b-a)/2._R_P + (a+b)/2._R_P) * &
+                                                                  f%f(self%y(j)*(d-c)/2._R_P + (d+c)/2._R_P) * &
+                                                                  f%f(self%z(k)*(h-g)/2._R_P + (g+h)/2._R_P)
+      enddo
+    enddo
+  enddo
+  integral = integral * (b - a) / 2.0_R_P * (d - c) / 2.0_R_P * (h - g) / 2.0_R_P
+  return
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction integrate_3D
 !-----------------------------------------------------------------------------------------------------------------------------------
 endmodule FORbID_integrator_gauss

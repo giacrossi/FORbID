@@ -120,8 +120,10 @@ type, extends(adaptive_integrator) :: newton_cotes_integrator
   real(R_P)              :: k        !< Coefficient for integration.
   real(R_P), allocatable :: w(:)     !< Integration weights.
   contains
-    procedure, pass(self), public :: init      !< Initialize the integrator.
-    procedure, pass(self), public :: integrate !< Integrate integrand function.
+    procedure, pass(self), public :: init         !< Initialize the integrator.
+    procedure, pass(self), public :: integrate_1D !< Integrate integrand function.
+    procedure, pass(self), public :: integrate_2D !< Integrate integrand function.
+    procedure, pass(self), public :: integrate_3D !< Integrate integrand function.
 endtype newton_cotes_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
@@ -203,7 +205,7 @@ contains
   endselect
   endsubroutine init
 
-  function integrate(self, f, a, b) result(integral)
+  function integrate_1D(self, f, a, b) result(integral)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Integrate function *f* with one of the Newton-Cotes' formula chosed.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -223,7 +225,37 @@ contains
   integral = integral * (b - a) * self%k
   return
   !---------------------------------------------------------------------------------------------------------------------------------
-  endfunction integrate
+  endfunction integrate_1D
+
+  function integrate_2D(self, f, a, b, c, d) result(integral)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Integrate function *f* with one of the Newton-Cotes' formula chosed.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(newton_cotes_integrator), intent(IN) :: self     !< Actual Newton-Cotes integrator.
+  class(integrand),               intent(IN) :: f        !< Function to be integrated.
+  real(R_P),                      intent(IN) :: a        !< Lower bound.
+  real(R_P),                      intent(IN) :: b        !< Upper bound.
+  real(R_P),                      intent(IN) :: c        !< Lower bound.
+  real(R_P),                      intent(IN) :: d        !< Upper bound.
+  real(R_P)                                  :: integral !< Definite integral value.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction integrate_2D
+
+  function integrate_3D(self, f, a, b, c, d, g, h) result(integral)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Integrate function *f* with one of the Newton-Cotes' formula chosed.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(newton_cotes_integrator), intent(IN) :: self     !< Actual Newton-Cotes integrator.
+  class(integrand),               intent(IN) :: f        !< Function to be integrated.
+  real(R_P),                      intent(IN) :: a        !< Lower bound.
+  real(R_P),                      intent(IN) :: b        !< Upper bound.
+  real(R_P),                      intent(IN) :: c        !< Lower bound.
+  real(R_P),                      intent(IN) :: d        !< Upper bound.
+  real(R_P),                      intent(IN) :: g        !< Lower bound.
+  real(R_P),                      intent(IN) :: h        !< Upper bound.
+  real(R_P)                                  :: integral !< Definite integral value.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction integrate_3D
 
 !  recursive subroutine adaptive_integrate(self, f, a, b, b_orig, tol, ad_integral)
 !  !---------------------------------------------------------------------------------------------------------------------------------

@@ -38,14 +38,16 @@ type, extends(integrator) :: romberg_integrator
   !< @note The integrator must be initialized (initialize the coefficient and the weights) before used.
   real(R_P)              :: tol      !< Tolerance
   contains
-    procedure, pass(self), public :: init      !< Initialize the integrator.
-    procedure, pass(self), public :: integrate !< Integrate integrand function.
+    procedure, pass(self), public :: init         !< Initialize the integrator.
+    procedure, pass(self), public :: integrate_1D !< Integrate integrand function.
+    procedure, pass(self), public :: integrate_2D !< Integrate integrand function.
+    procedure, pass(self), public :: integrate_3D !< Integrate integrand function.
 endtype romberg_integrator
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
   elemental subroutine init(self, n, tol)
   !---------------------------------------------------------------------------------------------------------------------------------
-  !< Create the Romberg integration formula: initialize the weights and the coefficient k.
+  !< Create the Romberg integration formula: initialize the order and the tolerance.
   !---------------------------------------------------------------------------------------------------------------------------------
   class(romberg_integrator), intent(INOUT) :: self   !< Romberg integrator.
   integer(I_P),              intent(IN)    :: n      !< Number of extrapolations.
@@ -54,7 +56,7 @@ contains
   self%tol = tol
   endsubroutine init
 
-  function integrate(self, f, a, b) result(integral)
+  function integrate_1D(self, f, a, b) result(integral)
   !---------------------------------------------------------------------------------------------------------------------------------
   !< Integrate function *f* with the Romberg formula.
   !---------------------------------------------------------------------------------------------------------------------------------
@@ -88,5 +90,35 @@ contains
   integral = R(i,i)
   return
   !---------------------------------------------------------------------------------------------------------------------------------
-  endfunction integrate
+  endfunction integrate_1D
+
+  function integrate_2D(self, f, a, b, c, d) result(integral)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Integrate function *f* with the Romberg formula.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(romberg_integrator), intent(IN) :: self     !< Actual Romberg integrator.
+  class(integrand),          intent(IN) :: f        !< Function to be integrated.
+  real(R_P),                 intent(IN) :: a        !< Lower bound.
+  real(R_P),                 intent(IN) :: b        !< Upper bound.
+  real(R_P),                 intent(IN) :: c        !< Lower bound.
+  real(R_P),                 intent(IN) :: d        !< Upper bound.
+  real(R_P)                             :: integral !< Definite integral value.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction integrate_2D
+
+  function integrate_3D(self, f, a, b, c, d, g, h) result(integral)
+  !---------------------------------------------------------------------------------------------------------------------------------
+  !< Integrate function *f* with the Romberg formula.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  class(romberg_integrator), intent(IN) :: self     !< Actual Romberg integrator.
+  class(integrand),          intent(IN) :: f        !< Function to be integrated.
+  real(R_P),                 intent(IN) :: a        !< Lower bound.
+  real(R_P),                 intent(IN) :: b        !< Upper bound.
+  real(R_P),                 intent(IN) :: c        !< Lower bound.
+  real(R_P),                 intent(IN) :: d        !< Upper bound.
+  real(R_P),                 intent(IN) :: g        !< Lower bound.
+  real(R_P),                 intent(IN) :: h        !< Upper bound.
+  real(R_P)                             :: integral !< Definite integral value.
+  !---------------------------------------------------------------------------------------------------------------------------------
+  endfunction integrate_3D
 endmodule FORbID_integrator_romberg
